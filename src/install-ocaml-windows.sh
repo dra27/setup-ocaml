@@ -4,6 +4,7 @@ export OPAMJOBS=3
 set -ex
 if [[ -e ~/.opam/config ]]; then
   echo Already configured from cache
+  opam update
   exit 0
 fi
 
@@ -15,16 +16,10 @@ else
 fi
 OPAM_REPOSITORY="$2"
 SWITCH="${OCAML_VERSION}+mingw64c"
-OPAM_DL_SUB_LINK=0.0.0.2
-OPAM_URL="https://github.com/fdopen/opam-repository-mingw/releases/download/${OPAM_DL_SUB_LINK}/opam64.tar.xz"
-OPAM_ARCH=opam64
 export OPAM_LINT="false"
 export CYGWIN='winsymlinks:native'
 export OPAMYES=1
 set -eu
-curl -fsSL -o "${OPAM_ARCH}.tar.xz" "${OPAM_URL}"
-tar -xf "${OPAM_ARCH}.tar.xz"
-"${OPAM_ARCH}/install.sh" --quiet --prefix=/usr
 # if a msvc compiler must be compiled from source, we have to modify the
 # environment first
 case "$SWITCH" in
@@ -35,9 +30,9 @@ case "$SWITCH" in
     eval "$(ocaml-env cygwin --ms=vs2015 --no-opam --64)"
     ;;
 esac
+# XXX This is wrong - we should init here and make the switch later
 opam init -c "ocaml-variants.${SWITCH}" --disable-sandboxing --enable-completion --enable-shell-hook --auto-setup default "$OPAM_REPOSITORY"
 opam config set jobs "$OPAMJOBS"
-opam update
 is_msvc=0
 case "$SWITCH" in
   *msvc*)
