@@ -102,7 +102,7 @@ export async function getOpam(
   if (osPlat === "win32") return acquireOpamWindows(version, repository);
   else if (osPlat === "darwin") return acquireOpamDarwin(version, repository);
   else if (osPlat === "linux") {
-    core.exportVariable("OPAMROOT", "/mnt/runner/.opam");
+    core.exportVariable("OPAMROOT", "/tmp/.opam");
     return acquireOpamLinux(version, repository);
   }
 }

@@ -5111,7 +5111,7 @@ function getOpam(version, repository) {
             else if (osPlat === "darwin")
                 return [2 /*return*/, acquireOpamDarwin(version, repository)];
             else if (osPlat === "linux") {
-                core.exportVariable("OPAMROOT", "/mnt/runner/.opam");
+                core.exportVariable("OPAMROOT", "/tmp/.opam");
                 return [2 /*return*/, acquireOpamLinux(version, repository)];
             }
             return [2 /*return*/];
