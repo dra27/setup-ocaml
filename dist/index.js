@@ -5058,14 +5058,20 @@ function acquireOpamLinux(version, customRepository) {
                     return [4 /*yield*/, exec_1.exec("sudo apt-get -y install bubblewrap ocaml-native-compilers ocaml-compiler-libs musl-tools")];
                 case 6:
                     _a.sent();
-                    return [4 /*yield*/, exec_1.exec("\"" + toolPath + "/opam\"", ["init", "-yav", repository])];
+                    return [4 /*yield*/, exec_1.exec("sudo mkdir /mnt/runner")];
                 case 7:
                     _a.sent();
-                    return [4 /*yield*/, exec_1.exec(__nccwpck_require__.ab + "install-ocaml-unix.sh", [version])];
+                    return [4 /*yield*/, exec_1.exec("sudo chown runner /mnt/runner")];
                 case 8:
                     _a.sent();
-                    return [4 /*yield*/, exec_1.exec("\"" + toolPath + "/opam\"", ["install", "-y", "depext"])];
+                    return [4 /*yield*/, exec_1.exec("\"" + toolPath + "/opam\"", ["init", "-yav", repository])];
                 case 9:
+                    _a.sent();
+                    return [4 /*yield*/, exec_1.exec(__nccwpck_require__.ab + "install-ocaml-unix.sh", [version])];
+                case 10:
+                    _a.sent();
+                    return [4 /*yield*/, exec_1.exec("\"" + toolPath + "/opam\"", ["install", "-y", "depext"])];
+                case 11:
                     _a.sent();
                     return [2 /*return*/];
             }
@@ -5104,8 +5110,10 @@ function getOpam(version, repository) {
                 return [2 /*return*/, acquireOpamWindows(version, repository)];
             else if (osPlat === "darwin")
                 return [2 /*return*/, acquireOpamDarwin(version, repository)];
-            else if (osPlat === "linux")
+            else if (osPlat === "linux") {
+                core.exportVariable("OPAMROOT", "/mnt/runner/.opam");
                 return [2 /*return*/, acquireOpamLinux(version, repository)];
+            }
             return [2 /*return*/];
         });
     });

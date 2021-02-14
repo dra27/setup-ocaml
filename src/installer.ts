@@ -77,6 +77,8 @@ async function acquireOpamLinux(version: string, customRepository: string) {
   await exec(
     "sudo apt-get -y install bubblewrap ocaml-native-compilers ocaml-compiler-libs musl-tools"
   );
+  await exec("sudo mkdir /mnt/runner");
+  await exec("sudo chown runner /mnt/runner");
   await exec(`"${toolPath}/opam"`, ["init", "-yav", repository]);
   await exec(path.join(__dirname, "install-ocaml-unix.sh"), [version]);
   await exec(`"${toolPath}/opam"`, ["install", "-y", "depext"]);
@@ -99,5 +101,8 @@ export async function getOpam(
   core.exportVariable("OPAMYES", "1");
   if (osPlat === "win32") return acquireOpamWindows(version, repository);
   else if (osPlat === "darwin") return acquireOpamDarwin(version, repository);
-  else if (osPlat === "linux") return acquireOpamLinux(version, repository);
+  else if (osPlat === "linux") {
+    core.exportVariable("OPAMROOT", "/mnt/runner/.opam");
+    return acquireOpamLinux(version, repository);
+  }
 }

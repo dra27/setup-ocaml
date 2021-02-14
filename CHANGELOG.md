@@ -8,6 +8,11 @@ and this project adheres to
 
 ## [unreleased]
 
+### Changed
+
+- Ubuntu uses /mnt/runner/.opam for OPAMROOT, using faster Azure temporary
+  storage.
+
 ## [1.1.6]
 
 ### Changed
