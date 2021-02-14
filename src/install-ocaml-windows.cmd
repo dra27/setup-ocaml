@@ -1,9 +1,12 @@
 @setlocal
 @echo off
-if exist D:\ocaml-cache\cache.wim (
+if exist D:\ocaml-cache\cache.tar (
   cd /d D:\
-  "C:\Program Files\7-Zip\7z.exe" x D:\ocaml-cache\cache.wim
-  del D:\ocaml-cache\cache.wim
+  if not exist cygwin\bin\nul md cygwin\bin
+  copy ocaml-cache\bootstrap\* cygwin\bin\
+  D:\cygwin\bin\tar -pxf /cygdrive/d/ocaml-cache/cache.tar -C /cygdrive/d/cygwin
+  dir D:\cygwin\dev /a
+  dir D:\cygwin /a
   goto :EOF
 )
 echo on
@@ -14,5 +17,7 @@ D:\cygwin\bin\bash -l %1\install-ocaml-windows.sh %3 %4
 mkdir %CYGWIN_ROOT%\wrapperbin
 copy %1\opam.cmd %CYGWIN_ROOT%\wrapperbin\opam.cmd
 @echo off
-if not exist D:\ocaml-cache md D:\ocaml-cache
-"C:\Program Files\7-Zip\7z.exe" a -snl -twim D:\ocaml-cache\cache.wim %CYGWIN_ROOT%
+if not exist D:\ocaml-cache\bootstrap md D:\ocaml-cache\bootstrap
+D:\cygwin\bin\bash -lc "cd /cygdrive/d/cygwin ; tar -pcf /cygdrive/d/ocaml-cache/cache.tar ."
+rem TODO migrate old solution for this...
+for %%f in (cygiconv-2.dll cygintl-8.dll cygwin1.dll tar.exe) do copy D:\cygwin\bin\%%f D:\ocaml-cache\bootstrap\
