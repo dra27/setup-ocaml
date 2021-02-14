@@ -2,6 +2,11 @@
 export OPAMYES=1
 export OPAMJOBS=3
 set -ex
+if [[ -e ~/.opam/config ]]; then
+  echo Already configured from cache
+  exit 0
+fi
+
 echo Preparing Cygwin environment
 if [ "$1" = "" ]; then
   OCAML_VERSION="4.07.1"
