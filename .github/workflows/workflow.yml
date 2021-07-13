@@ -85,4 +85,6 @@ jobs:
           dune-cache: ${{ matrix.dune-cache }}
           opam-repositories: ${{ matrix.opam-repositories }}
 
+      - run: opam repo
+
       - run: opam depext uri --install
